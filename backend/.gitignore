@@ -1,0 +1,7 @@
+node_modules
+dist
+# keep environment variables out of version control
+.env
+# exclude the generated prisma client directory.
+/src/generated/prisma
+
