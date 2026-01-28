@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 
 // mount routes
 const authRoutes = require("./routes/auth.routes");
+const taskRoutes = require("./routes/task.routes")
 
 // create an express application instance
 const app = express();
@@ -14,8 +15,10 @@ app.use(cors({
   origin: ["http://localhost:3000"], 
   credentials: true
 }));
-app.use(express.json()); // read json data from requests
-app.use(cookieParser()); // read cookies from incoming HTTP requests
+// read json data from requests
+app.use(express.json()); 
+// read cookies from incoming HTTP requests
+app.use(cookieParser()); 
 
 // health check endpoint
 app.get("/health", (req, res) => {
@@ -25,6 +28,8 @@ app.get("/health", (req, res) => {
 // auth endpoints
 app.use("/auth", authRoutes);
 
+// task endpoints
+app.use("/tasks", taskRoutes)
 
 // export app for server.js
 module.exports = app;
