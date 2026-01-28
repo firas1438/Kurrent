@@ -3,6 +3,9 @@ const express = require("express")
 const cors = require("cors")
 const cookieParser = require("cookie-parser");
 
+// mount routes
+const authRoutes = require("./routes/auth.routes");
+
 // create an express application instance
 const app = express();
 
@@ -18,6 +21,10 @@ app.use(cookieParser()); // read cookies from incoming HTTP requests
 app.get("/health", (req, res) => {
     res.status(200).json({ status: "OK" })
 });
+
+// auth endpoints
+app.use("/auth", authRoutes);
+
 
 // export app for server.js
 module.exports = app;
