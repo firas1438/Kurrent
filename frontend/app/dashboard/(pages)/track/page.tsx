@@ -1,3 +1,5 @@
+import KanbanRender from "@/components/dashboard/tasks-kanban";
+
 export default function TrackPage() {
   return (
     <div className="space-y-6">
@@ -11,7 +13,7 @@ export default function TrackPage() {
 
       {/* content */}
       <div>
-        
+        <KanbanRender/>
       </div>
 
     </div>

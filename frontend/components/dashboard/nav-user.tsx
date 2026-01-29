@@ -51,24 +51,24 @@ export function NavUser({ user, }: { user: { name: string, email: string, avatar
             <DropdownMenuSeparator className="mb-2"/>
             {/* logout button */}
             <AlertDialog>
-            <AlertDialogTrigger asChild>
-                <DropdownMenuItem variant='destructive' className='text-sm' onSelect={(e) => e.preventDefault()} >
-                <LogOutIcon />
-                <span>Logout</span>
-                </DropdownMenuItem>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-                <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure you want to logout?</AlertDialogTitle>
-                <AlertDialogDescription>
-                    You will be signed out of your account and need to login again to access your banking services.
-                </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction> Logout </AlertDialogAction>
-                </AlertDialogFooter>
-            </AlertDialogContent>
+              <AlertDialogTrigger asChild>
+                  <DropdownMenuItem variant='destructive' className='text-sm' onSelect={(e) => e.preventDefault()} >
+                  <LogOutIcon />
+                  <span>Logout</span>
+                  </DropdownMenuItem>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                  <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure you want to logout?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                      You will be signed out of your account and need to login again to access your banking services.
+                  </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction> Logout </AlertDialogAction>
+                  </AlertDialogFooter>
+              </AlertDialogContent>
             </AlertDialog>
           </DropdownMenuContent>
         </DropdownMenu>
