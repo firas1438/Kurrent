@@ -7,8 +7,8 @@ import Link from 'next/link'
 
 const data = {
   user: {
-    name: "Firas Ben Ali",
-    email: "benalifiras1438@gmail.com",
+    name: "User",
+    email: "user@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
 }

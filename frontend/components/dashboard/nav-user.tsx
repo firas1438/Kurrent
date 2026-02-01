@@ -61,12 +61,12 @@ export function NavUser({ user, }: { user: { name: string, email: string, avatar
                   <AlertDialogHeader>
                   <AlertDialogTitle>Are you sure you want to logout?</AlertDialogTitle>
                   <AlertDialogDescription>
-                      You will be signed out of your account and need to login again to access your banking services.
+                      You will be signed out of your account and you will have to login again to access it.
                   </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction> Logout </AlertDialogAction>
+                  <AlertDialogAction > Logout </AlertDialogAction>
                   </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>

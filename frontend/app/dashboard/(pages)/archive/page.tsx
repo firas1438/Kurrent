@@ -3,8 +3,8 @@ export default function ArchivePage() {
     <div className="space-y-6">
       {/* header */}
       <div>
-        <h1 className="text-xl font-bold">Task Archive</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-lg font-semibold">Task Archive</h1>
+        <p className="text-sm text-muted-foreground">
           View the complete history of your completed tasks.
         </p>
       </div>

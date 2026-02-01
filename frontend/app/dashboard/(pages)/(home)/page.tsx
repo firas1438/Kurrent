@@ -1,4 +1,4 @@
-import { MetricCards } from "./components/metric-cards"
+import { MetricCards } from "@/components/dashboard/metric-cards"
 // import { ChartAreaInteractive } from "@/components/chart-area-interactive"
 
 export default function Page() {

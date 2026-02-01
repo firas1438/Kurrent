@@ -39,7 +39,7 @@ export default function KanbanRender() {
       },
       {
         id: 2,
-        title: "Implement user auth...",
+        title: "Implement user authentication",
         description: "Add JWT-based authentication with refresh tokens",
         status: "NEW",
         priority: "HIGH",
@@ -109,7 +109,7 @@ export default function KanbanRender() {
       {
         id: 9,
         title: "Set up Terraform for AWS",
-        description: "Create infrastructure as code for cloud deployment",
+        description: "Create infrastructure as code for cloud deployment.",
         status: "COMPLETED",
         priority: "HIGH",
         userId: 1,
@@ -151,7 +151,7 @@ export default function KanbanRender() {
                         <Kanban.ItemHandle asChild>
                           <div className="flex flex-col gap-1">
                             <div className="flex items-center justify-between gap-2">
-                              <span className="line-clamp-1 text-sm font-medium flex-1 min-w-0">
+                              <span className="line-clamp-2 text-sm font-medium flex-1 min-w-0">
                                 {task.title}
                               </span>
                               <Badge variant={PRIORITY_COLORS[task.priority]}
@@ -161,7 +161,7 @@ export default function KanbanRender() {
                               </Badge>
                             </div>
                             {task.description && (
-                              <p className="text-muted-foreground line-clamp-2 text-xs mt-1">
+                              <p className="text-muted-foreground line-clamp-15 text-xs mt-1">
                                 {task.description}
                               </p>
                             )}

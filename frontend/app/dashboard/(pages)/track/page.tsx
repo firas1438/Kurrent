@@ -5,8 +5,8 @@ export default function TrackPage() {
     <div className="space-y-6">
       {/* header */}
       <div>
-        <h1 className="text-xl font-bold">Track Tasks</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-lg font-semibold">Track Tasks</h1>
+        <p className="text-sm text-muted-foreground">
           Track the progress of your ongoing work.
         </p>
       </div>

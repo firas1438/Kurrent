@@ -9,7 +9,7 @@ const Header = () => {
         <div className='flex items-center gap-4'>
           <SidebarTrigger />
           <Separator orientation='vertical' className='hidden h-4! sm:block' />
-          <span>Welcome back to Kurrent!</span>
+          <span className='text-sm'>Welcome back to Kurrent!</span>
         </div>
         {/* profile dropdown */}
         {/* <div className='flex items-center gap-1'> */}
