@@ -3,6 +3,7 @@ import { NavMenu } from "../ui/nav-menu";
 import { NavigationSheet } from "../ui/navigation-sheet";
 import ThemeSwitcher from "../theme-toggle";
 import Logo from '@/components/logo'
+import Link from "next/link";
 
 
 const Navbar = () => {
@@ -16,7 +17,9 @@ const Navbar = () => {
 
         <div className="flex items-center gap-3">
           <ThemeSwitcher/>
-          <Button className="hidden md:inline-flex">Sign In</Button>
+          <Button asChild className="hidden md:inline-flex">
+            <Link href="/login">Sign In</Link>
+          </Button>
           
           {/* Mobile Menu */}
           <div className="md:hidden">

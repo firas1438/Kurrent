@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
@@ -517,6 +517,7 @@ function SidebarMenuButton({
       data-size={size}
       data-active={isActive}
       className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
+      suppressHydrationWarning
       {...props}
     />
   )

@@ -27,12 +27,7 @@ const getAnimationVariants = (animation: string) => {
     }
 };
 
-const Container = ({
-    children,
-    className,
-    animation = "fadeUp",
-    delay = 0,
-}: Props) => {
+const Container = ({ children, className, animation = "fadeUp", delay = 0, }: Props) => {
     return (
         <motion.div
             className={className}

@@ -10,12 +10,7 @@ const createTask = async (req, res) => {
     }
 
     const task = await prisma.task.create({
-      data: {
-        title,
-        description,
-        priority,
-        userId: req.user.id
-      }
+      data: { title, description, priority, userId: req.user.id }
     });
 
     res.status(201).json(task);

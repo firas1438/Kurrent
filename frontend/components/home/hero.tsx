@@ -5,6 +5,7 @@ import Container from "../global/container"
 import { Button } from "../ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { CheckCircle2Icon, ArrowRightIcon } from "lucide-react"
+import Link from "next/link"
 
 const featureCards = [
   {
@@ -53,7 +54,7 @@ const Hero = () => {
               </Container>
 
               <Container delay={0.1}>
-                <h2 className="text-balance leading-tight! text-4xl md:text-5xl font-semibold tracking-tight mt-6 w-full text-transparent bg-clip-text bg-linear-to-b from-foreground dark:to-neutral-400 to-neutral-500">
+                <h2 className="text-balance leading-tight! text-4xl md:text-5xl font-semibold tracking-tight mt-6 w-full dark:text-transparent dark:bg-clip-text dark:bg-linear-to-b dark:from-foreground dark:to-neutral-400">
                   Organize Your Tasks
                   <br className="hidden lg:inline-block" /> & Simplify Your Day.
                 </h2>
@@ -86,13 +87,12 @@ const Hero = () => {
 
               <Container delay={0.3}>
                 <div className="mt-8 lg:mt-6">
-                  <Button size="lg">
-                    Get started now{" "}
-                    <ArrowRightIcon
-                      className="rtl:rotate-180"
-                      data-icon="inline-end"
-                    />
-                  </Button>
+                  <Link href="/dashboard">
+                    <Button size="lg">
+                      Get started now{" "}
+                      <ArrowRightIcon className="rtl:rotate-180" data-icon="inline-end" />
+                    </Button>
+                  </Link>
                 </div>
               </Container>
             </div>

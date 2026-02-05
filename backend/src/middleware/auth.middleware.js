@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 // verify access token
-exports.authenticate = (req, res, next) => {
+const authenticate = (req, res, next) => {
   const token = req.cookies.accessToken;
 
   if (!token) {
@@ -16,3 +16,5 @@ exports.authenticate = (req, res, next) => {
     return res.status(401).json({ message: "Access token expired" });
   }
 };
+
+module.exports = { authenticate };

@@ -90,7 +90,7 @@ const stats = [
         description: "Track and complete tasks with our intuitive management system now!",
         button: {
             text: "Track tasks",
-            href: "#"
+            href: "/dashboard"
         }
     }
 ];
@@ -228,7 +228,7 @@ const Features = () => {
                   <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
                     {stats[1]?.description}
                   </p>
-                  <Link href="#">
+                  <Link href="/dashboard">
                     <Button size="sm" variant="outline" className="mt-3 text-sm">
                       {stats[1]?.button?.text}
                     </Button>

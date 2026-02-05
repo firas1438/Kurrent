@@ -10,11 +10,11 @@ const REFRESH_TOKEN_EXPIRES_IN = "7d";
 // register function
 const register = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { name, email, password } = req.body;
 
     // basic validation
-    if (!email || !password) {
-      return res.status(400).json({ message: "Email and password are required" });
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "Name, email, and password are required" });
     }
 
     // check if user already exists
@@ -31,7 +31,7 @@ const register = async (req, res) => {
 
     // create user
     await prisma.user.create({
-      data: { email, password: hashedPassword }
+      data: { name, email, password: hashedPassword }
     });
 
     res.status(201).json({ message: "User registered successfully" });
@@ -56,7 +56,7 @@ const login = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid credentials." });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -113,10 +113,26 @@ const logout = (req, res) => {
   res.json({ message: "Logged out successfully" });
 };
 
+// fetch current user data
+const me = async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      select: { id: true, name: true, email: true, },
+    });
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch user" });
+  }
+};
+
+
 
 module.exports = {
   register,
   login,
   refresh,
   logout,
+  me,
 }

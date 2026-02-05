@@ -27,12 +27,12 @@ function Cta() {
             </div>
             {/* buttons */}
             <div className="relative z-10 mt-14 flex flex-col sm:flex-row gap-4">
-              <Link href="/movies">
+              <Link href="/dashboard">
                 <Button size="lg" className="gap-2">
                   Get Started Now <ArrowUpRight className="h-5! w-5!" />
                 </Button>
               </Link>
-              <Link href="/signup">
+              <Link href="/register">
                 <Button size="lg" variant="outline" className="gap-2">
                   Create Account <Forward className="h-5! w-5!" />
                 </Button>

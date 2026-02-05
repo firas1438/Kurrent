@@ -1,12 +1,11 @@
 "use client"
 
-import { ChevronsUpDown, LogOutIcon, } from "lucide-react"
+import { ChevronsUpDown } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage, } from "@/components/ui/avatar"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, 
+import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, 
 DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar, } from "@/components/ui/sidebar"
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, 
-AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, } from "@/components/ui/alert-dialog"
+import LogOutButton from "./logout-button"
 
 
 export function NavUser({ user, }: { user: { name: string, email: string, avatar: string } }) {
@@ -50,26 +49,8 @@ export function NavUser({ user, }: { user: { name: string, email: string, avatar
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="mb-2"/>
             {/* logout button */}
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                  <DropdownMenuItem variant='destructive' className='text-sm' onSelect={(e) => e.preventDefault()} >
-                  <LogOutIcon />
-                  <span>Logout</span>
-                  </DropdownMenuItem>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                  <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure you want to logout?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                      You will be signed out of your account and you will have to login again to access it.
-                  </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction > Logout </AlertDialogAction>
-                  </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            <LogOutButton/>
+
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
