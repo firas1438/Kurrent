@@ -45,7 +45,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
       toast({ title: "Logged in successfully!", description: "Welcome back to your Kurrent account!", variant: "secondary", duration: 10000 })
       router.push("/dashboard")
     } catch(err: any) {
-      setServerError(err.response?.data?.message || "Login failed");
+      setServerError(err.response?.data?.message || "Login failed, please try again later.");
       console.error(err);
     }
   }

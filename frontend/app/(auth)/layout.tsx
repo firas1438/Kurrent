@@ -2,6 +2,7 @@ import Image from "next/image"
 import Logo from "@/components/logo"
 import Link from "next/link"
 import Container from "@/components/global/container"
+import { BackButton } from "@/components/back-button"
 
 export default function AuthLayout({ children, }: { children: React.ReactNode }) {
   return (
@@ -10,9 +11,14 @@ export default function AuthLayout({ children, }: { children: React.ReactNode })
       <Container animation="fadeLeft" delay={0.2} className="flex flex-col py-6 px-8">
         {/* logo */}
         <div className="flex justify-center gap-2 md:justify-start"> 
-          <Link href="/" className="flex items-center gap-2 font-medium">
+          {/* home  logo(desktop) */}
+          <Link href="/" className="flex items-center gap-2 font-medium md:hidden">
             <Logo /> 
           </Link>
+          {/* return button (mobile) */}
+          <div className="hidden md:block">
+            <BackButton/>
+          </div>
         </div>
 
         {/* forms */}

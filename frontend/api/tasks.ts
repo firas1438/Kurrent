@@ -18,6 +18,11 @@ export const getTasks = () => {
   return api.get("/tasks");
 };
 
+// get completed tasks
+export const getCompletedTasks = () => {
+  return api.get("/tasks/completed");
+};
+
 // get a single task by ID
 export const getTaskById = (id: number) => {
   return api.get(`/tasks/${id}`);

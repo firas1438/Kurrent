@@ -1,11 +1,6 @@
 import { create } from "zustand";
 import { getMe, logout as logoutApi  } from "@/api";
-
-type User = {
-  id: number;
-  name: string;
-  email: string;
-};
+import type { User } from "@/types";
 
 type AuthState = {
   user: User | null;

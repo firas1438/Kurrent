@@ -14,7 +14,7 @@ const LogOutButton = () => {
   const handleLogout = async () => {
     try {
       await logout(); 
-      toast({ title: "Logged out successfully!", description: "You have been successfully signed out.", variant:"secondary", duration:10000 });
+      toast({ title: "Logged out successfully!", description: "Sign back in to access your Kurrent account!", variant:"secondary", duration:10000 });
       router.push("/login"); 
     } catch (err: any) {
       toast({ title: "Error", description: (err.response?.data?.message || "Logout failed, please try again later."), variant: "destructive", });

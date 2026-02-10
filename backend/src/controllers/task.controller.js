@@ -39,6 +39,23 @@ const getTasks = async (req, res) => {
   }
 };
 
+// get completed tasks
+const getCompletedTasks = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const tasks = await prisma.task.findMany({
+      where: { userId, status: "COMPLETED" },
+      orderBy: { createdAt: "desc" }
+    });
+
+    res.status(200).json(tasks);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch completed tasks" });
+  }
+};
+
 // get task by id
 const getTaskById = async (req, res) => {
   try {
@@ -147,6 +164,7 @@ const deleteTask = async (req, res) => {
 module.exports = {
   createTask,
   getTasks,
+  getCompletedTasks,
   getTaskById,
   updateTask,
   deleteTask,

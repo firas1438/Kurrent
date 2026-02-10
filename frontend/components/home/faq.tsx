@@ -73,7 +73,7 @@ const Faq = () => {
               {/* right side */}
               <Container delay={0.4} animation="fadeRight" className="col-span-1 w-full z-10">
                 <div className="flex w-full">
-                  <Image src="/faq.svg" alt="Box" width={1024} height={1024} className="w-full dark:filter-[invert(0)] filter-[invert(1)] opacity-75 dark:opacity-100" />
+                  <Image src="/faq.svg" alt="Box" width={1024} height={1024} className="w-full dark:filter-[invert(0)] filter-[invert(1)] opacity-100" />
                 </div>
               </Container>
 
