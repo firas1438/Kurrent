@@ -1,204 +1,171 @@
 "use client";
 
-import * as React from "react";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, 
-AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, } from "@/components/ui/alert-dialog"
+import { useState, useEffect } from "react";
 import * as Kanban from "@/components/ui/kanban";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
+import { DeleteTaskButton } from "./modals/delete-task";
+import { Spinner } from "@/components/ui/spinner";
+import { getTasks, updateTask } from "@/api";
+import { toast } from "@/hooks/use-toast";
+import type { Task } from "@/types/task";
 
-interface Task {
-  id: number;
-  title: string;
-  description?: string;
-  status: "NEW" | "INPROGRESS" | "DELAYED" | "COMPLETED";
-  priority: "LOW" | "MEDIUM" | "HIGH";
-  userId: number;
-  createdAt: string; // ISO date string
-}
+// kanban columns are keyed by task status
+type Status = "NEW" | "INPROGRESS" | "DELAYED" | "COMPLETED";
+type Columns = Record<Status, Task[]>;
 
+const COLUMN_ORDER: Status[] = ["NEW", "INPROGRESS", "DELAYED", "COMPLETED"];
+const EMPTY_COLUMNS: Columns = { NEW: [], INPROGRESS: [], DELAYED: [], COMPLETED: [] };
 
-const PRIORITY_COLORS: Record<string, "destructive" | "default" | "secondary"> = {
-  "HIGH": "destructive",
-  "MEDIUM": "default",
-  "LOW": "secondary"
+// badge color per priority for task cards.
+const PRIORITY_VARIANT: Record<string, "destructive" | "default" | "secondary"> = {
+  HIGH: "destructive",
+  MEDIUM: "default",
+  LOW: "secondary",
 };
 
-export default function KanbanRender() {
-  const [columns, setColumns] = React.useState<Record<string, Task[]>>({
-    "new": [
-      {
-        id: 1,
-        title: "Setup Kubernetes cluster",
-        description: "Deploy and configure Kubernetes for the task platform",
-        status: "NEW",
-        priority: "HIGH",
-        userId: 1,
-        createdAt: "2024-03-25T10:30:00Z"
-      },
-      {
-        id: 2,
-        title: "Implement user authentication",
-        description: "Add JWT-based authentication with refresh tokens",
-        status: "NEW",
-        priority: "HIGH",
-        userId: 1,
-        createdAt: "2024-03-26T14:20:00Z"
-      },
-      {
-        id: 3,
-        title: "Design database schema",
-        description: "Create Prisma schema for tasks and users",
-        status: "NEW",
-        priority: "MEDIUM",
-        userId: 1,
-        createdAt: "2024-03-27T09:15:00Z"
-      }
-    ],
-    "inProgress": [
-      {
-        id: 4,
-        title: "Build task API endpoints",
-        description: "Create CRUD endpoints for task management",
-        status: "INPROGRESS",
-        priority: "HIGH",
-        userId: 1,
-        createdAt: "2024-03-20T11:45:00Z"
-      },
-      {
-        id: 5,
-        title: "Set up CI/CD pipeline",
-        description: "Configure GitHub Actions for automated testing and deployment",
-        status: "INPROGRESS",
-        priority: "MEDIUM",
-        userId: 1,
-        createdAt: "2024-03-22T16:30:00Z"
-      }
-    ],
-    "delayed": [
-      {
-        id: 6,
-        title: "Implement monitoring with Prometheus",
-        description: "Set up metrics collection and dashboards",
-        status: "DELAYED",
-        priority: "MEDIUM",
-        userId: 1,
-        createdAt: "2024-03-15T13:00:00Z"
-      }
-    ],
-    "completed": [
-      {
-        id: 7,
-        title: "Initialize project structure",
-        description: "Set up monorepo with backend and frontend",
-        status: "COMPLETED",
-        priority: "LOW",
-        userId: 1,
-        createdAt: "2024-03-10T08:00:00Z"
-      },
-      {
-        id: 8,
-        title: "Configure Docker containers",
-        description: "Create Dockerfiles for all services",
-        status: "COMPLETED",
-        priority: "MEDIUM",
-        userId: 1,
-        createdAt: "2024-03-12T15:45:00Z"
-      },
-      {
-        id: 9,
-        title: "Set up Terraform for AWS",
-        description: "Create infrastructure as code for cloud deployment.",
-        status: "COMPLETED",
-        priority: "HIGH",
-        userId: 1,
-        createdAt: "2024-03-18T12:30:00Z"
-      }
-    ]
-  });
+// splits a flat task list into columns by status.
+function groupTasksByStatus(tasks: Task[]): Columns {
+  const out = { ...EMPTY_COLUMNS };
+  for (const key of COLUMN_ORDER) {
+    out[key] = [];
+  }
+  for (const task of tasks) {
+    const status = COLUMN_ORDER.includes(task.status as Status) ? (task.status as Status) : "NEW";
+    out[status].push(task);
+  }
+  return out;
+}
 
-  // Helper to format date
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric"
+interface KanbanRenderProps {
+  refreshTrigger?: number;
+}
+
+export default function KanbanRender({ refreshTrigger = 0 }: KanbanRenderProps) {
+  const [columns, setColumns] = useState<Columns>(() => groupTasksByStatus([]));
+  const [loading, setLoading] = useState(true);
+
+  // load all tasks on mount and when refreshTrigger changes (e.g. after creating a task).
+  useEffect(() => {
+    let cancelled = false;
+    getTasks()
+      .then((res) => {
+        if (!cancelled) setColumns(groupTasksByStatus(res.data));
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          console.error(err);
+          toast({ title: "Error fetching tasks", description: "There was an error while trying to fetch your tasks.", variant: "destructive", duration: 7000, });
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [refreshTrigger]);
+
+  // when a card is moved to another column, persist the new status to the API.
+  const onColumnsChange = (next: Record<string, Task[]>) => {
+    const nextCols: Columns = {
+      NEW: next.NEW ?? [],
+      INPROGRESS: next.INPROGRESS ?? [],
+      DELAYED: next.DELAYED ?? [],
+      COMPLETED: next.COMPLETED ?? [],
+    };
+    setColumns((prev) => {
+      for (const status of COLUMN_ORDER) {
+        for (const task of nextCols[status]) {
+          const oldStatus = COLUMN_ORDER.find((s) => prev[s].some((t: Task) => t.id === task.id));
+          if (oldStatus !== status) {
+            updateTask(task.id, { status }).catch((err) => {
+              console.error(err);
+              toast({ title: "Error updating task", description: "Failed to update task status.", variant: "destructive", duration: 5000 });
+            });
+          }
+        }
+      }
+      return nextCols;
     });
   };
 
+  // show spinner while tasks are loading.
+  if (loading) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center">
+        <div className="flex flex-col items-center gap-3 text-center">
+          <Spinner className="size-12 text-muted-foreground/50" />
+          <p className="text-sm font-medium text-muted-foreground">Loading tasks...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <Kanban.Root value={columns} onValueChange={setColumns} getItemValue={(item) => item.id.toString()}>
-        <Kanban.Board className="grid auto-rows-fr sm:grid-cols-4">
-          {Object.entries(columns).map(([columnValue, tasks]) => (
-            <Kanban.Column key={columnValue} value={columnValue}>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">
-                    {columnValue}
-                  </h3>
-                  <Badge variant="secondary" className="pointer-events-none rounded-sm text-muted-foreground">
-                    {tasks.length}
-                  </Badge>
+      {/* draggable board: columns = status; moving a card updates task status on the server. */}
+      <Kanban.Root value={columns} onValueChange={onColumnsChange} getItemValue={(item) => item.id.toString()}>
+        <Kanban.Board className="grid auto-rows-fr sm:grid-cols-4 gap-6 sm:gap-4">
+          {COLUMN_ORDER.map((columnValue) => {
+            const tasks = columns[columnValue] ?? [];
+            return (
+              <Kanban.Column key={columnValue} value={columnValue}>
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{columnValue}</h3>
+                    <Badge variant="secondary" className="pointer-events-none rounded-sm text-muted-foreground">
+                      {tasks.length}
+                    </Badge>
+                  </div>
                 </div>
-              </div>
-              <div className="flex flex-col gap-2 p-0.5">
-                {tasks.map((task) => (
-                  <Kanban.Item key={task.id} value={task.id.toString()} asChild>
-                    <div className="bg-card rounded-md border p-3 shadow-xs hover:shadow-sm transition-shadow">
-                      <div className="flex flex-col gap-2">
-                        <Kanban.ItemHandle asChild>
-                          <div className="flex flex-col gap-1">
-                            <div className="flex items-center justify-between gap-2">
-                              <span className="line-clamp-2 text-sm font-medium flex-1 min-w-0">
-                                {task.title}
-                              </span>
-                              <Badge variant={PRIORITY_COLORS[task.priority]}
-                                className="pointer-events-none h-5 rounded-sm px-1.5 text-[11px] shrink-0"
-                              >
-                                {task.priority}
-                              </Badge>
-                            </div>
-                            {task.description && (
-                              <p className="text-muted-foreground line-clamp-15 text-xs mt-1">
-                                {task.description}
-                              </p>
-                            )}
-                          </div>
-                        </Kanban.ItemHandle>
-                        <div className="flex items-center justify-between text-xs">
+                <div className="flex flex-col gap-2 p-0.5">
+                  {tasks.map((task) => (
+                    <Kanban.Item key={task.id} value={task.id.toString()} asChild>
+                      <div className="bg-card rounded-md border p-3 shadow-xs transition-shadow hover:shadow-sm">
+                        <div className="flex flex-col gap-2">
                           <Kanban.ItemHandle asChild>
-                            <div className="text-muted-foreground flex-1"> Created: {formatDate(task.createdAt)} </div>
+                            <div className="flex flex-col gap-1">
+                              <div className="flex min-w-0 flex-1 items-center justify-between gap-2">
+                                <span className="line-clamp-2 flex-1 text-sm font-medium">{task.title}</span>
+                                <Badge variant={PRIORITY_VARIANT[task.priority] ?? "default"} className="h-5 shrink-0 rounded-sm px-1.5 text-[11px] pointer-events-none">
+                                  {task.priority}
+                                </Badge>
+                              </div>
+                              {task.description && (
+                                <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{task.description}</p>
+                              )}
+                            </div>
                           </Kanban.ItemHandle>
-                            {/* delete button */}
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                  <Button variant="ghost" size="icon" className="h-5 w-5 hover:bg-destructive/10 hover:text-destructive" >
-                                      <Trash2 className="h-3.5 w-3.5" />
-                                  </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Are you sure you want to delete this task?</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                      This task will be permanently deleted. This action is irreversible.
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel> Cancel </AlertDialogCancel>
-                                  <AlertDialogAction> Delete </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
+                          <div className="flex items-center justify-between text-xs">
+                            <Kanban.ItemHandle asChild>
+                              <span className="flex-1 text-muted-foreground">
+                                Created: {new Date(task.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                              </span>
+                            </Kanban.ItemHandle>
+                            <DeleteTaskButton
+                              taskId={task.id}
+                              taskTitle={task.title}
+                              onDeleted={(id: number) => {
+                                setColumns((prev) => {
+                                  const out = { ...prev };
+                                  for (const status of COLUMN_ORDER) {
+                                    out[status] = prev[status].filter(
+                                      (t) => t.id !== id
+                                    );
+                                  }
+                                  return out;
+                                });
+                              }}
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Kanban.Item>
-                ))}
-              </div>
-            </Kanban.Column>
-          ))}
+                    </Kanban.Item>
+                  ))}
+                </div>
+              </Kanban.Column>
+            );
+          })}
         </Kanban.Board>
         <Kanban.Overlay>
           <div className="bg-primary/10 size-full rounded-md border-2 border-primary/20" />

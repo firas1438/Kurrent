@@ -1,25 +1,15 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
 import { getPriorityVariant, formatDate } from "@/lib/task-helpers";
-
-type Task = {
-  id: number;
-  title: string;
-  description: string | null;
-  status: string;
-  priority: string;
-  userId: number;
-  createdAt: string;
-};
+import { DeleteTaskButton } from "@/components/dashboard/modals/delete-task";
+import type { Task } from "@/types/task";
 
 interface TaskTableProps {
   tasks: Task[];
-  onDelete: (task: Task) => void;
+  onDeleted: (taskId: number) => void;
 }
 
-export function TaskTable({ tasks, onDelete }: TaskTableProps) {
+export function TaskTable({ tasks, onDeleted }: TaskTableProps) {
   return (
     <div className="hidden md:block rounded-md border">
       <Table>
@@ -50,9 +40,11 @@ export function TaskTable({ tasks, onDelete }: TaskTableProps) {
                 {formatDate(task.createdAt)}
               </TableCell>
               <TableCell>
-                <Button variant="ghost" size="icon" onClick={() => onDelete(task)} className="h-5 w-5 hover:bg-destructive/10 hover:text-destructive" >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </Button>
+                <DeleteTaskButton
+                  taskId={task.id}
+                  taskTitle={task.title}
+                  onDeleted={onDeleted}
+                />
               </TableCell>
             </TableRow>
           ))}

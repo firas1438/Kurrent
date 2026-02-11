@@ -1,25 +1,15 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Trash2 } from "lucide-react";
 import { getPriorityVariant, formatDate } from "@/lib/task-helpers";
-
-type Task = {
-  id: number;
-  title: string;
-  description: string | null;
-  status: string;
-  priority: string;
-  userId: number;
-  createdAt: string;
-};
+import { DeleteTaskButton } from "@/components/dashboard/modals/delete-task";
+import type { Task } from "@/types/task";
 
 interface TaskCardsProps {
   tasks: Task[];
-  onDelete: (task: Task) => void;
+  onDeleted: (taskId: number) => void;
 }
 
-export function TaskCards({ tasks, onDelete }: TaskCardsProps) {
+export function TaskCards({ tasks, onDeleted }: TaskCardsProps) {
   return (
     <div className="md:hidden space-y-4">
       {tasks.map((task) => (
@@ -46,9 +36,11 @@ export function TaskCards({ tasks, onDelete }: TaskCardsProps) {
             <p className="text-xs text-muted-foreground">
               {formatDate(task.createdAt)}
             </p>
-            <Button variant="ghost" size="icon" onClick={() => onDelete(task)} className="h-5 w-5 hover:bg-destructive/10 hover:text-destructive" >
-              <Trash2 className="h-3.5 w-3.5" />
-            </Button>
+            <DeleteTaskButton
+              taskId={task.id}
+              taskTitle={task.title}
+              onDeleted={onDeleted}
+            />
           </div>
         </Card>
       ))}
