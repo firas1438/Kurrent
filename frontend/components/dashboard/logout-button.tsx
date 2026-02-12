@@ -22,14 +22,15 @@ const LogOutButton = () => {
     }
   };
 
+
   return (
     <div>
       {/* logout button */}
       <AlertDialog>
         {/* trigger */}
         <AlertDialogTrigger asChild>
-          <DropdownMenuItem variant="destructive" className="text-sm" onSelect={(e) => e.preventDefault()} >
-            <LogOutIcon />
+          <DropdownMenuItem variant="destructive" className="cursor-pointer font-medium text-[0.8rem]" onSelect={(e) => e.preventDefault()} >
+            <LogOutIcon className="h-3 w-3"/>
             <span>Logout</span>
           </DropdownMenuItem>
         </AlertDialogTrigger>

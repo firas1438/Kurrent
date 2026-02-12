@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import * as Kanban from "@/components/ui/kanban";
 import { Badge } from "@/components/ui/badge";
 import { DeleteTaskButton } from "./modals/delete-task";
-import { Spinner } from "@/components/ui/spinner";
-import { getTasks, updateTask } from "@/api";
+import { updateTask } from "@/api";
 import { toast } from "@/hooks/use-toast";
 import type { Task } from "@/types/task";
 
@@ -37,33 +36,17 @@ function groupTasksByStatus(tasks: Task[]): Columns {
 }
 
 interface KanbanRenderProps {
-  refreshTrigger?: number;
+  tasks: Task[];
 }
 
-export default function KanbanRender({ refreshTrigger = 0 }: KanbanRenderProps) {
-  const [columns, setColumns] = useState<Columns>(() => groupTasksByStatus([]));
-  const [loading, setLoading] = useState(true);
+// Renders the kanban board for a given list of tasks.
+export default function KanbanRender({ tasks }: KanbanRenderProps) {
+  const [columns, setColumns] = useState<Columns>(() => groupTasksByStatus(tasks));
 
-  // load all tasks on mount and when refreshTrigger changes (e.g. after creating a task).
+  // Rebuild columns whenever the incoming tasks list changes.
   useEffect(() => {
-    let cancelled = false;
-    getTasks()
-      .then((res) => {
-        if (!cancelled) setColumns(groupTasksByStatus(res.data));
-      })
-      .catch((err) => {
-        if (!cancelled) {
-          console.error(err);
-          toast({ title: "Error fetching tasks", description: "There was an error while trying to fetch your tasks.", variant: "destructive", duration: 7000, });
-        }
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [refreshTrigger]);
+    setColumns(groupTasksByStatus(tasks));
+  }, [tasks]);
 
   // when a card is moved to another column, persist the new status to the API.
   const onColumnsChange = (next: Record<string, Task[]>) => {
@@ -88,18 +71,6 @@ export default function KanbanRender({ refreshTrigger = 0 }: KanbanRenderProps) 
       return nextCols;
     });
   };
-
-  // show spinner while tasks are loading.
-  if (loading) {
-    return (
-      <div className="flex min-h-[50vh] items-center justify-center">
-        <div className="flex flex-col items-center gap-3 text-center">
-          <Spinner className="size-12 text-muted-foreground/50" />
-          <p className="text-sm font-medium text-muted-foreground">Loading tasks...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div>

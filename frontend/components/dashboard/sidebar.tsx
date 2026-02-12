@@ -4,16 +4,11 @@ SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
 import { NavUser } from './nav-user'
 import Logo from '@/components/logo'
 import Link from 'next/link'
-
-const data = {
-  user: {
-    name: "User",
-    email: "user@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-}
+import { useAuthStore } from '@/store/auth-state'
 
 const Sidebar = () => {
+  const { user } = useAuthStore();
+
   return (
     <UISidebar className=''>
       <SidebarContent className='p-4'>
@@ -63,7 +58,7 @@ const Sidebar = () => {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        {user && <NavUser user={user} />}
       </SidebarFooter>
 
     </UISidebar>
