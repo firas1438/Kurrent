@@ -6,12 +6,14 @@ import { type ReactNode } from "react";
 interface Props {
     children: ReactNode;
     className?: string;
-    animation?: "fadeUp" | "fadeDown" | "fadeLeft" | "fadeRight" | "scaleUp";
+    animation?: "fadeIn" | "fadeUp" | "fadeDown" | "fadeLeft" | "fadeRight" | "scaleUp";
     delay?: number;
 }
 
 const getAnimationVariants = (animation: string) => {
     switch (animation) {
+        case "fadeIn":
+            return { opacity: 0 };
         case "fadeUp":
             return { opacity: 0, y: 20 };
         case "fadeDown":

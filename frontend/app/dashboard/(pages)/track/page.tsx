@@ -8,6 +8,7 @@ import { CircleSlashIcon } from "lucide-react";
 import { getTasks } from "@/api";
 import { toast } from "@/hooks/use-toast";
 import type { Task } from "@/types/task";
+import Container from "@/components/global/container";
 
 export default function TrackPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -32,7 +33,7 @@ export default function TrackPage() {
   }, [refreshTrigger]);
 
   return (
-    <div className="space-y-8 sm:space-y-6">
+    <Container animation="fadeIn" delay={0.3} className="space-y-8 sm:space-y-6">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         {/* header*/}
         <div>
@@ -75,6 +76,6 @@ export default function TrackPage() {
           <KanbanRender tasks={tasks} />
         </div>
       )}
-    </div>
+    </Container>
   );
 }

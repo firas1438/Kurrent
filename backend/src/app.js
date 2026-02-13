@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 // mount routes
 const authRoutes = require("./routes/auth.routes");
 const taskRoutes = require("./routes/task.routes")
+const statsRoutes = require("./routes/stats.routes")
 
 // create an express application instance
 const app = express();
@@ -30,6 +31,9 @@ app.use("/auth", authRoutes);
 
 // task endpoints
 app.use("/tasks", taskRoutes)
+
+// stats endpoints
+app.use("/stats", statsRoutes)
 
 // export app for server.js
 module.exports = app;

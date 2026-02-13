@@ -17,7 +17,9 @@ const Sidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem> 
-                <Logo/> 
+                <Link href="/">
+                  <Logo/> 
+                </Link>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
@@ -32,7 +34,7 @@ const Sidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link href="/dashboard">
-                    <ChartSplineIcon /> <span>Home</span>
+                    <ChartSplineIcon /> <span>Dashboard</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

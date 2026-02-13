@@ -10,6 +10,7 @@ import { Task } from "@/types/task";
 import { Spinner } from "@/components/ui/spinner";
 import { CheckCircle2 } from "lucide-react"; 
 import { getCompletedTasks } from "@/api";
+import Container from "@/components/global/container";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -36,7 +37,7 @@ export default function ArchivePage() {
   }, []);
 
   return (
-    <div className="space-y-6">
+    <Container animation="fadeIn" delay={0.3} className="space-y-6">
       {/* header */}
       <div>
         <h1 className="text-lg font-semibold">Task Archive</h1>
@@ -79,6 +80,6 @@ export default function ArchivePage() {
           <TaskPagination currentPage={currentPage} totalPages={totalPages} onPageChange={goToPage} />
         </div>
       )}
-    </div>
+    </Container>
   );
 }
