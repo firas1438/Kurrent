@@ -68,12 +68,12 @@ export function CreateTaskButton({ onSuccess }: CreateTaskButtonProps) {
         priority: values.priority,
       };
       await createTask(payload);
-      toast({ title: "Task Created", description: `"${payload.title}" has been added to your Kanban board.`, variant: "secondary", });
+      toast({ title: "Task Created!", description: `Task has been added to your Kanban board.`, variant: "secondary", });
       handleOpenChange(false);
       onSuccess?.();
     } catch (err) {
       console.error(err);
-      toast({ title: "Error creating task", description: "Please try again later.", variant: "destructive", });
+      toast({ title: "Error creating task!", description: "Please try again later.", variant: "destructive", });
     }
   };
 

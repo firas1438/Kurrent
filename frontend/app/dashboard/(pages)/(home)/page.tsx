@@ -81,7 +81,7 @@ export default function Page() {
     <Container animation="fadeIn" delay={0.3} className="flex flex-1 flex-col">
       <div className="@container/main flex flex-1 flex-col gap-4 md:gap-6">
         {loading ? (
-          <div className="flex min-h-[40vh] items-center justify-center">
+          <div className="flex min-h-[70vh] items-center justify-center">
             <div className="flex flex-col items-center gap-3 text-center">
               <Spinner className="size-10 text-muted-foreground/50" />
               <p className="text-sm font-medium text-muted-foreground">

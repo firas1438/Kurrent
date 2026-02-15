@@ -6,7 +6,7 @@ export function useChartColors() {
   // light mode colors
   const lightColors = {
     primary: "#404040",     
-    secondary: "#555555",   
+    secondary: "#333333",   
     border: "#c9c9c9",
     background: "#ffffff",
     foreground: "#000000",
@@ -18,7 +18,7 @@ export function useChartColors() {
   // dark mode colors
   const darkColors = {
     primary: "#a3a3a3",      
-    secondary: "#333333",    
+    secondary: "#2f2f2f",    
     border: "#404040",
     background: "#171717",
     foreground: "#ffffff",

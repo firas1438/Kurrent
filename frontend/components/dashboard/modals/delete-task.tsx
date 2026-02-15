@@ -30,12 +30,12 @@ export function DeleteTaskButton({ taskId, taskTitle, onDeleted, }: DeleteTaskBu
     try {
       setLoading(true);
       await deleteTask(taskId);
-      toast({ title: "Task Deleted", description: `"${taskTitle}" has been permanently removed.`, variant: "destructive", });
+      toast({ title: "Task Deleted!", description: `"${taskTitle}" has been permanently removed.`, variant: "destructive", });
       onDeleted?.(taskId);
       setOpen(false);
     } catch (err) {
       console.error(err);
-      toast({ title: "Error deleting task", description: "There was an error while trying to delete the task. Please try again.", variant: "destructive", });
+      toast({ title: "Error deleting task!", description: "There was an error while trying to delete the task. Please try again.", variant: "destructive", });
     } finally {
       setLoading(false);
     }
