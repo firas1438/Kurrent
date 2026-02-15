@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import * as Kanban from "@/components/ui/kanban";
 import { Badge } from "@/components/ui/badge";
 import { DeleteTaskButton } from "./modals/delete-task";
@@ -8,6 +8,7 @@ import { updateTask } from "@/api";
 import { toast } from "@/hooks/use-toast";
 import type { Task } from "@/types/task";
 import Container from "@/components/global/container";
+import { StatusDot } from "@/components/ui/status-dot";
 
 // kanban columns are keyed by task status
 type Status = "NEW" | "INPROGRESS" | "DELAYED" | "COMPLETED";
@@ -45,32 +46,13 @@ export default function KanbanRender({ tasks }: KanbanRenderProps) {
   const [columns, setColumns] = useState<Columns>(() => groupTasksByStatus(tasks));
   const [completedTaskId, setCompletedTaskId] = useState<string | null>(null);
   const [completedTask, setCompletedTask] = useState<Task | null>(null);
-  const boardRef = useRef<HTMLDivElement>(null);
-  const [columnHeight, setColumnHeight] = useState<number>(500);
 
   // rebuild columns whenever the incoming tasks list changes.
   useEffect(() => {
     setColumns(groupTasksByStatus(tasks));
   }, [tasks]);
 
-  // Calculate column height based on viewport
-  useEffect(() => {
-    const calculateHeight = () => {
-      if (boardRef.current) {
-        const viewportHeight = window.innerHeight;
-        const boardTop = boardRef.current.getBoundingClientRect().top;
-        // Subtract padding and header space (approx 200px for header, margins, etc.)
-        const availableHeight = viewportHeight - boardTop - 100;
-        setColumnHeight(Math.max(400, availableHeight)); // Minimum 400px
-      }
-    };
-
-    calculateHeight();
-    window.addEventListener('resize', calculateHeight);
-    return () => window.removeEventListener('resize', calculateHeight);
-  }, []);
-
-  // Handle toast for completed tasks in a useEffect to avoid rendering issues
+  // handle toast for completed tasks
   useEffect(() => {
     if (completedTask) {
       toast({
@@ -97,81 +79,68 @@ export default function KanbanRender({ tasks }: KanbanRenderProps) {
       for (const task of nextCols.COMPLETED) {
         const wasNotInCompleted = !prev.COMPLETED.some((t: Task) => t.id === task.id);
         if (wasNotInCompleted) {
-          // This task was just moved to COMPLETED
+          // this task was just moved to COMPLETED
           setCompletedTaskId(task.id.toString());
-          setCompletedTask(task); // This will trigger the toast in useEffect
+          setCompletedTask(task); // this will trigger the toast in useEffect
           
-          // Update the task status in the API
+          // update the task status in the API
           updateTask(task.id, { status: "COMPLETED" }).catch((err) => {
             console.error(err);
-            toast({ 
-              title: "Error updating task", 
-              description: "Failed to update task status.", 
-              variant: "destructive", 
-              duration: 5000 
-            });
+            toast({ title: "Error updating task", description: "Failed to update task status.", variant: "destructive", duration: 5000 });
           });
 
-          // Remove the task after animation
+          // remove the task after animation
           setTimeout(() => {
             setCompletedTaskId(null);
-          }, 200);
+          }, 500);
         }
       }
 
-      // Handle regular status updates for other columns
+      // handle regular status updates for other columns
       for (const status of COLUMN_ORDER.filter(s => s !== "COMPLETED")) {
         for (const task of nextCols[status]) {
           const oldStatus = COLUMN_ORDER.find((s) => prev[s].some((t: Task) => t.id === task.id));
           if (oldStatus && oldStatus !== status) {
             updateTask(task.id, { status }).catch((err) => {
               console.error(err);
-              toast({ 
-                title: "Error updating task", 
-                description: "Failed to update task status.", 
-                variant: "destructive", 
-                duration: 5000 
-              });
+              toast({ title: "Error updating task", description: "Failed to update task status.", variant: "destructive", duration: 5000 });
             });
           }
         }
       }
 
-      // Filter out completed tasks from the COMPLETED column
+      // filter out completed tasks from the COMPLETED column
       return {
         NEW: nextCols.NEW,
         INPROGRESS: nextCols.INPROGRESS,
         DELAYED: nextCols.DELAYED,
-        COMPLETED: [], // Always keep COMPLETED column empty
+        COMPLETED: [], // always keep COMPLETED column empty
       };
     });
   };
 
   return (
-    <div ref={boardRef}>
+    <div>
       {/* draggable board: columns = status; moving a card updates task status on the server. */}
       <Kanban.Root value={columns} onValueChange={onColumnsChange} getItemValue={(item) => item.id.toString()}>
-        <Kanban.Board className="grid auto-rows-fr sm:grid-cols-4 gap-6 sm:gap-4">
+        <Kanban.Board className="grid auto-rows-fr sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-4">
           {COLUMN_ORDER.map((columnValue) => {
             const tasks = columns[columnValue] ?? [];
             
-            // Don't show any tasks in COMPLETED column
+            // don't show any tasks in COMPLETED column
             if (columnValue === "COMPLETED") {
               return (
                 <Kanban.Column key={columnValue} value={columnValue}>
                   <div className="mb-4 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{columnValue}</h3>
-                      <Badge variant="secondary" className="pointer-events-none rounded-sm text-muted-foreground">
-                        0
-                      </Badge>
+                      <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                        <StatusDot status={columnValue} />
+                        {columnValue}
+                      </h3>
                     </div>
                   </div>
-                  <div 
-                    className="flex flex-col border-2 border-dashed rounded-lg"
-                    style={{ height: `${columnHeight}px` }}
-                  >
-                    {/* Empty state message that fills the entire column */}
+                  <div className="h-[420px] flex flex-col border-2 border-dashed rounded-lg">
+                    {/* empty state message that fills the entire column */}
                     <div className="flex-1 flex items-center justify-center p-4">
                       <p className="text-sm text-muted-foreground text-center">
                         Drop tasks here to mark them as completed.
@@ -182,21 +151,21 @@ export default function KanbanRender({ tasks }: KanbanRenderProps) {
               );
             }
             
-            // Show tasks in other columns
+            // show tasks in other columns
             return (
               <Kanban.Column key={columnValue} value={columnValue}>
                 <div className="mb-4 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{columnValue}</h3>
+                    <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2.5">
+                      <StatusDot status={columnValue} />
+                      {columnValue}
+                    </h3>
                     <Badge variant="secondary" className="pointer-events-none rounded-sm text-muted-foreground">
                       {tasks.length}
                     </Badge>
                   </div>
                 </div>
-                <div 
-                  className="overflow-y-auto pr-1"
-                  style={{ height: `${columnHeight}px` }}
-                >
+                <div className="h-[420px] overflow-y-auto pr-1">
                   <div className="flex flex-col gap-2">
                     {tasks.map((task) => (
                       <Kanban.Item key={task.id} value={task.id.toString()} asChild>

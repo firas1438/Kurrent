@@ -18,7 +18,7 @@ export function useChartColors() {
   // dark mode colors
   const darkColors = {
     primary: "#a3a3a3",      
-    secondary: "#2f2f2f",    
+    secondary: "#333333",    
     border: "#404040",
     background: "#171717",
     foreground: "#ffffff",
