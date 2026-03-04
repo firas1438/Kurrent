@@ -1,7 +1,8 @@
 import axios from "axios";
 import { attachAuthInterceptor } from "./interceptor";
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL;
+const baseURL = "http://localhost:5000";
+console.log('Using API URL:', baseURL);
 
 const api = axios.create({
   baseURL,

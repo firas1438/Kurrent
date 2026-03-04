@@ -26,7 +26,7 @@ export function NavUser({ user }: { user: User }) {
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium text-[0.8rem]">{user.name}</span>
-                <span className="truncate text-[0.7rem] text-muted-foreground font-medium">Kurrent Account</span>
+                <span className="truncate text-[0.7rem] text-muted-foreground font-medium">Kurrent</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>

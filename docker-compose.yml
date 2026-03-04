@@ -1,0 +1,67 @@
+# Docker compose configuration file
+
+services:
+
+  # Database service
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      
+  # Backend service
+  backend:
+    build: ./backend
+    container_name: backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+
+  # Frontend service
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+
+# persistent storage for mysql data
+volumes:
+  mysql-data:
+
+
+
+# - important notes:
+
+# service names = hostnames
+# inside docker network, my backend connects to MySQL using mysql:3306.
+# my frontend connects to backend using http://backend:5000.
+
+# volumes:
+# mysql data is persisted with a named volume mysql-data.
+
+# depends_on:
+# ensures containers start in the right order (database → backend → frontend).
+
+# ports:
+# exposes ports to host machine:
+# front → 3000
+# back → 5000
+# mysql → 3306

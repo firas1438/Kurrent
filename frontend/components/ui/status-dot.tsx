@@ -7,7 +7,7 @@ const dotVariants = cva(
   {
     variants: {
       status: {
-        NEW: "bg-white",
+        NEW: "bg-gray-200",
         INPROGRESS: "bg-yellow-500",
         DELAYED: "bg-red-500",
         COMPLETED: "bg-green-500",
@@ -24,7 +24,7 @@ const pulseVariants = cva(
   {
     variants: {
       status: {
-        NEW: "bg-white/40",
+        NEW: "bg-gray-300/40",
         INPROGRESS: "bg-yellow-400/50",
         DELAYED: "bg-red-400/50",
         COMPLETED: "bg-green-400/50",
