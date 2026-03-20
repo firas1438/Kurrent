@@ -12,25 +12,25 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: setup node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
-      - name: install dependencies
+      - name: Install dependencies
         working-directory: frontend
         run: npm ci
 
-      - name: lint
+      - name: Lint
         working-directory: frontend
         run: npm run lint
 
-      - name: build
+      - name: Build
         working-directory: frontend
         run: npm run build
 
@@ -39,21 +39,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: setup node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: backend/package-lock.json
 
-      - name: install dependencies
+      - name: Install dependencies
         working-directory: backend
         run: npm ci
 
-      - name: test (simple syntax check for now)
+      - name: Test (simple syntax check for now)
         working-directory: backend
         run: |
           node --check src/app.js

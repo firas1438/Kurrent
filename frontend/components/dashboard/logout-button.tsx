@@ -5,6 +5,7 @@ import { LogOutIcon } from "lucide-react"
 import { logout } from "@/api"
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast"
+import axios from "axios";
 
 const LogOutButton = () => {
 
@@ -16,8 +17,17 @@ const LogOutButton = () => {
       await logout(); 
       toast({ title: "Logged out successfully!", description: "Sign back in to access your Kurrent account!", variant:"secondary", duration:10000 });
       router.push("/login"); 
-    } catch (err: any) {
-      toast({ title: "Error", description: (err.response?.data?.message || "Logout failed, please try again later."), variant: "destructive", });
+    } catch (err: unknown) {
+      const message =
+        axios.isAxiosError(err) && err.response?.data
+          ? (err.response.data as { message?: string }).message
+          : undefined;
+
+      toast({
+        title: "Error",
+        description: message || "Logout failed, please try again later.",
+        variant: "destructive",
+      });
       console.error(err);
     }
   };

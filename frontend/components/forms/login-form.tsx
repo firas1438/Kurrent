@@ -16,6 +16,7 @@ import { toast } from "@/hooks/use-toast"
 import { login } from "@/api"
 import Container from "../global/container"
 import { useAuthStore } from "@/store/auth-state"
+import axios from "axios";
 
 
 // zod validation schema
@@ -44,8 +45,13 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
       await fetchUser();
       toast({ title: "Logged in successfully!", description: "Welcome back to your Kurrent account!", variant: "secondary", duration: 10000 })
       router.push("/dashboard")
-    } catch(err: any) {
-      setServerError(err.response?.data?.message || "Login failed, please try again later.");
+    } catch (err: unknown) {
+      const message =
+        axios.isAxiosError(err) && err.response?.data
+          ? (err.response.data as { message?: string }).message
+          : undefined;
+
+      setServerError(message || "Login failed, please try again later.");
       console.error(err);
     }
   }
@@ -109,7 +115,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
             <Info className="w-5 h-5 text-muted-foreground" />
           </FieldSeparator>
           <FieldDescription className="text-sm text-muted-foreground text-center">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link href="/register" className="text-primary hover:underline font-medium">
               Register now
             </Link>

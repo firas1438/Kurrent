@@ -1,24 +1,9 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import {
-    motion,
-    useTransform,
-    AnimatePresence,
-    useMotionValue,
-    useSpring,
-} from "motion/react";
+import { motion, useTransform, AnimatePresence, useMotionValue, useSpring, } from "motion/react";
 
-export const AnimatedTooltip = ({
-    items,
-}: {
-    items: {
-        id: number;
-        name: string;
-        designation: string;
-        image: string;
-    }[];
-}) => {
+export const AnimatedTooltip = ({ items, }: { items: { id: number; name: string; designation: string; image: string; }[]; }) => {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const springConfig = { stiffness: 100, damping: 15 };
     const x = useMotionValue(0);
@@ -33,20 +18,22 @@ export const AnimatedTooltip = ({
         springConfig,
     );
 
-    const handleMouseMove = (event: any) => {
+    const handleMouseMove = (event: React.MouseEvent<HTMLImageElement>) => {
         if (animationFrameRef.current) {
             cancelAnimationFrame(animationFrameRef.current);
         }
 
+        const halfWidth = event.currentTarget.offsetWidth / 2;
+        const offsetX = event.nativeEvent.offsetX;
+
         animationFrameRef.current = requestAnimationFrame(() => {
-            const halfWidth = event.target.offsetWidth / 2;
-            x.set(event.nativeEvent.offsetX - halfWidth);
+            x.set(offsetX - halfWidth);
         });
     };
 
     return (
         <>
-            {items.map((item, idx) => (
+            {items.map((item) => (
                 <div
                     className="group relative -mr-4"
                     key={item.name}

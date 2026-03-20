@@ -15,6 +15,7 @@ import Link from "next/link"
 import { toast } from "@/hooks/use-toast"
 import { register } from "@/api"
 import Container from "../global/container"
+import axios from "axios";
 
 
 // zod validation schema
@@ -41,8 +42,13 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
       await register(data);
       toast({ title: "Account created successfully!", description: "Welcome to Kurrent! You can now log in.", variant: "secondary", duration: 10000 })
       router.push("/login")
-    } catch(err: any) {
-      setServerError(err.response?.data?.message || "Registration failed");
+    } catch (err: unknown) {
+      const message =
+        axios.isAxiosError(err) && err.response?.data
+          ? (err.response.data as { message?: string }).message
+          : undefined;
+
+      setServerError(message || "Registration failed");
       console.error(err);
     }
   }

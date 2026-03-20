@@ -55,7 +55,7 @@ export default function TrackPage() {
               Loading tasks...
             </p>
             <p className="mt-1 text-xs text-muted-foreground/70">
-              Your tasks will appear here once they're loaded.
+              Your tasks will appear here once they&apos;re loaded.
             </p>
           </div>
         </div>

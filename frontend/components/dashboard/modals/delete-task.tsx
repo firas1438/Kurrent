@@ -56,7 +56,7 @@ export function DeleteTaskButton({ taskId, taskTitle, onDeleted, }: DeleteTaskBu
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Task</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{taskTitle}"? This action cannot be
+              Are you sure you want to delete &quot;{taskTitle}&quot;? This action cannot be
               undone.
             </AlertDialogDescription>
           </AlertDialogHeader>

@@ -41,6 +41,8 @@ const formSchema = z.object({
   priority: z.enum(["LOW", "MEDIUM", "HIGH"]),
 });
 
+type CreateTaskFormValues = z.infer<typeof formSchema>;
+
 interface CreateTaskButtonProps {
   onSuccess?: () => void;
 }
@@ -48,7 +50,7 @@ interface CreateTaskButtonProps {
 export function CreateTaskButton({ onSuccess }: CreateTaskButtonProps) {
   const [open, setOpen] = useState(false);
 
-  const form = useForm<any>({
+  const form = useForm<CreateTaskFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: { title: "", description: "", priority: "MEDIUM", },
   });
@@ -60,7 +62,7 @@ export function CreateTaskButton({ onSuccess }: CreateTaskButtonProps) {
     setOpen(next);
   };
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: CreateTaskFormValues) => {
     try {
       const payload = {
         title: values.title.trim(),

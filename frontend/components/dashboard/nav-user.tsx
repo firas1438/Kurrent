@@ -1,17 +1,16 @@
 "use client"
 
-import { ChevronsUpDown, User as UserIcon, LogOut } from "lucide-react"
+import { ChevronsUpDown } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, 
-DropdownMenuTrigger, DropdownMenuGroup, DropdownMenuItem } from "@/components/ui/dropdown-menu"
+DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar, } from "@/components/ui/sidebar"
 import LogOutButton from "./logout-button"
 import type { User } from "@/types"
 
 export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar()
-  const initial =
-    user.name?.trim()?.[0]?.toUpperCase() ?? user.email?.trim()?.[0]?.toUpperCase() ?? "?"
+  const initial = user.name?.trim()?.[0]?.toUpperCase() ?? user.email?.trim()?.[0]?.toUpperCase() ?? "?"
 
   return (
     <SidebarMenu>

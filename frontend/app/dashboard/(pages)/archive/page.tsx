@@ -52,7 +52,9 @@ export default function ArchivePage() {
           <div className="flex flex-col items-center justify-center text-center">
             <Spinner className="mb-3 size-12 text-muted-foreground/50"/>
             <p className="text-sm font-medium text-muted-foreground"> Loading tasks... </p>
-            <p className="mt-1 text-xs text-muted-foreground/70"> Completed tasks will appear here once they're loaded. </p>
+            <p className="mt-1 text-xs text-muted-foreground/70">
+              Completed tasks will appear here once they&apos;re loaded.
+            </p>
           </div>
         </div>
       ) : tasks.length === 0 ? (
@@ -60,7 +62,9 @@ export default function ArchivePage() {
           <div className="flex flex-col items-center justify-center text-center">
             <CheckCircle2 className="mb-3 h-12 w-12 text-muted-foreground/50" />
             <p className="text-sm font-medium text-muted-foreground"> No completed tasks yet </p>
-            <p className="mt-1 text-xs text-muted-foreground/70"> New tasks will appear here once they're finished. </p>
+            <p className="mt-1 text-xs text-muted-foreground/70">
+              New tasks will appear here once they&apos;re finished.
+            </p>
           </div>
         </div>
       ) : (

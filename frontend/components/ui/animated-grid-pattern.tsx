@@ -9,7 +9,7 @@ interface AnimatedGridPatternProps {
   height?: number;
   x?: number;
   y?: number;
-  strokeDasharray?: any;
+  strokeDasharray?: string | number;
   numSquares?: number;
   className?: string;
   maxOpacity?: number;
@@ -35,8 +35,6 @@ export function AnimatedGridPattern({
   const id = useId();
   const containerRef = useRef<SVGSVGElement | null>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const [squares, setSquares] = useState(() => generateSquares(numSquares));
-
   function getPos() {
     return [
       Math.floor((Math.random() * dimensions.width) / width),
@@ -50,6 +48,8 @@ export function AnimatedGridPattern({
       pos: getPos(),
     }));
   }
+
+  const [squares, setSquares] = useState(() => generateSquares(numSquares));
 
   const updateSquarePosition = (id: number) => {
     setSquares((currentSquares) =>
@@ -66,13 +66,17 @@ export function AnimatedGridPattern({
 
   useEffect(() => {
     if (dimensions.width && dimensions.height) {
-      setSquares(generateSquares(numSquares));
+      const rafId = requestAnimationFrame(() => {
+        setSquares(generateSquares(numSquares));
+      });
+      return () => cancelAnimationFrame(rafId);
     }
-  }, [dimensions, numSquares]);
+    return undefined;
+  }, [dimensions.width, dimensions.height, numSquares]);
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
-      for (let entry of entries) {
+      for (const entry of entries) {
         setDimensions({
           width: entry.contentRect.width,
           height: entry.contentRect.height,

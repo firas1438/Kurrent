@@ -53,7 +53,7 @@ export default function Page() {
 
         setSummary(summaryRes.data);
         setCompletionTrend(
-          completionRes.data.map((item: any) => ({
+          completionRes.data.map((item: CompletionPoint) => ({
             date: item.date,
             completed: item.completed,
           }))
@@ -61,7 +61,7 @@ export default function Page() {
         setStatusData(statusRes.data);
         setPriorityData(priorityRes.data);
         setCreationTrend(
-          creationRes.data.map((item: any) => ({
+          creationRes.data.map((item: CreationPoint) => ({
             date: item.date,
             created: item.created,
           }))
