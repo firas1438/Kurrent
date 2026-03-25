@@ -12,10 +12,16 @@ const statsRoutes = require("./routes/stats.routes")
 const app = express();
 
 // allow cross-origin api requests (cors)
+const allowedOrigins = [
+  "http://localhost:3000",
+  process.env.CLIENT_URL 
+];
+
 app.use(cors({
-  origin: ["http://localhost:3000"], 
+  origin: allowedOrigins, 
   credentials: true
 }));
+
 // read json data from requests
 app.use(express.json()); 
 // read cookies from incoming HTTP requests

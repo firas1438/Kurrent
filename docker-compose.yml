@@ -2,7 +2,7 @@
 
 services:
 
-  # Database service
+  # database service
   mysql:
     image: mysql:8.0
     container_name: mysql
@@ -21,7 +21,7 @@ services:
       timeout: 20s
       retries: 10
       
-  # Backend service
+  # backend service
   backend:
     build: ./backend
     container_name: backend
@@ -34,11 +34,13 @@ services:
     ports:
       - "5000:5000"
 
-  # Frontend service
+  # frontend service
   frontend:
     build: ./frontend
     container_name: frontend
     restart: unless-stopped
+    env_file:
+      - ./frontend/.env
     depends_on:
       - backend
     ports:
