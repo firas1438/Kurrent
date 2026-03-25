@@ -32,8 +32,6 @@ COPY --from=dependencies /app/src ./src
 COPY --from=dependencies /app/prisma ./prisma
 COPY --from=dependencies /app/package*.json ./
 
-USER node
-
 EXPOSE 5000
 
 CMD ["sh", "-c", "npx prisma migrate deploy && node src/server.js"]

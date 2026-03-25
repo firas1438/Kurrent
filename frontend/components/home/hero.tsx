@@ -42,7 +42,7 @@ const Hero = () => {
         </div>
 
         {/* page content */}
-        <Wrapper className="py-16 sm:py-12 px-6">
+        <Wrapper className="py-16 sm:py-14 px-6">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 w-full ">
             {/* left side */}
             <div className="flex flex-col w-full z-10 items-center lg:items-start text-center lg:text-left lg:col-span-3">

@@ -6,10 +6,10 @@ A task tracking platform backed by a fully automated CI/CD pipeline enabling aut
 
 ## Tech Stack
 
-- **Frontend** — Next.js
-- **Backend** — Node.js, Express
-- **Database** — MySQL, Prisma ORM
-- **Containerization** — Docker, Docker Compose
+- **Frontend** - Next.js
+- **Backend** - Node.js, Express
+- **Database** - MySQL, Prisma ORM
+- **Containerization** - Docker, Docker Compose
 
 ## Services
 
