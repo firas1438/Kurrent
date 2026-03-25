@@ -87,7 +87,7 @@ const Hero = () => {
 
               <Container delay={0.3}>
                 <div className="mt-8 lg:mt-6">
-                  <Link href="/dashboard">
+                  <Link href="/login">
                     <Button size="lg">
                       Get started now{" "}
                       <ArrowRightIcon className="rtl:rotate-180" data-icon="inline-end" />

@@ -228,7 +228,7 @@ const Features = () => {
                   <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
                     {stats[1]?.description}
                   </p>
-                  <Link href="/dashboard">
+                  <Link href="/login">
                     <Button size="sm" variant="outline" className="mt-3 text-sm">
                       {stats[1]?.button?.text}
                     </Button>
