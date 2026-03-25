@@ -1,23 +1,33 @@
 # Kurrent
 
-A task tracking platform backed by a fully automated CI/CD pipeline enabling automated builds, testing, deployment, and production monitoring.
+A task management platform backed by a fully automated CI/CD pipeline enabling automated builds, testing, deployment.
 
-> ⚠️ This is a temporary README. Full documentation will be added once the project is complete.
+## System Architecture
+
+![System Architecture](https://i.imgur.com/YJQ8y8s.png)
+
+- **Frontend** communicates with the backend via REST API.
+- **Backend** handles authentication, task management, and database interactions.
+- **Database** stores user and task data.
+- **CI/CD** automation ensures that code changes are tested, built, and deployed automatically.
 
 ## Tech Stack
 
-- **Frontend** - Next.js
-- **Backend** - Node.js, Express
-- **Database** - MySQL, Prisma ORM
-- **Containerization** - Docker, Docker Compose
+| Component        | Technology / Details |
+|-----------------|--------------------|
+| Frontend         | Next.js |
+| Backend          | Node.js, Express |
+| Database         | MySQL, Prisma ORM |
+| Authentication   | JWT-based auth (access & refresh tokens) |
+| Containerization | Docker, Docker Compose |
+| Deployment       | Render, Vercel, Aiven |
+| CI/CD            | GitHub Actions |
 
-## Services
-
-| Service  | Port |
-|----------|------|
-| Frontend | 3000 |
-| Backend  | 5000 |
-| MySQL    | 3306 |
+## CI/CD Pipeline Overview
+- **Backend**: Git push → GitHub Actions builds Docker image → pushes to Docker Hub → Render webhook triggers automatic redeploy.
+- **Frontend**: Git push → Vercel detects changes → auto-deploys frontend.
+- **Environment Variables**: Configured in both frontend and backend for secure API and database access.
+- **End-to-End Flow**: Frontend communicates with backend, backend interacts with managed database, authentication handled via cookies, all automated via CI/CD.
 
 ## Getting Started
 
@@ -40,10 +50,6 @@ docker compose up --build
 docker compose up -d
 ```
 
-## Project Status
+## Contributions
 
-- [x] Fullstack application
-- [x] Dockerization & image optimization
-- [ ] CI/CD pipeline
-- [ ] Cloud deployment
-- [ ] Production monitoring
+Contributions are welcome! If you find any bugs or have suggestions for improvement, please open an issue or submit a pull request.
