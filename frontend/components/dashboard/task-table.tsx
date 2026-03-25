@@ -28,7 +28,7 @@ export function TaskTable({ tasks, onDeleted }: TaskTableProps) {
             <TableRow key={task.id}>
               <TableCell className="font-medium">{task.id}</TableCell>
               <TableCell className="font-medium">{task.title}</TableCell>
-              <TableCell className="hidden lg:table-cell truncate text-muted-foreground">
+              <TableCell className="hidden lg:table-cell max-w-0 w-full truncate text-muted-foreground">
                 {task.description || "—"}
               </TableCell>
               <TableCell>
