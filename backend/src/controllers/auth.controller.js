@@ -71,8 +71,8 @@ const login = async (req, res) => {
     const refreshToken = jwt.sign( { userId: user.id }, process.env.JWT_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRES_IN } );
 
     // set tokens as http-only cookie
-    res.cookie("accessToken", accessToken, { httpOnly: true, sameSite: "strict", secure: false, maxAge: 15 * 60 * 1000 });
-    res.cookie("refreshToken", refreshToken, { httpOnly: true, sameSite: "strict", secure: false, maxAge: 7 * 24 * 60 * 60 * 1000 });
+    res.cookie("accessToken", accessToken, { httpOnly: true, secure: true, sameSite: "none", maxAge: 15 * 60 * 1000 });
+    res.cookie("refreshToken", refreshToken, { httpOnly: true, secure: true, sameSite: "none",  maxAge: 7 * 24 * 60 * 60 * 1000 });
 
     res.json({ message: "Logged in successfully" });
 
@@ -97,7 +97,7 @@ const refresh = (req, res) => {
     const newAccessToken = jwt.sign( { userId: payload.userId }, process.env.JWT_SECRET, { expiresIn: ACCESS_TOKEN_EXPIRES_IN } );
 
     // set token as http-only cookie
-    res.cookie("accessToken", newAccessToken, { httpOnly: true, sameSite: "strict", secure: false, maxAge: 15 * 60 * 1000 });
+    res.cookie("accessToken", newAccessToken, { httpOnly: true, secure: true, sameSite: "none", maxAge: 15 * 60 * 1000 });
 
     res.json({ message: "Access token refreshed" });
 
@@ -108,8 +108,8 @@ const refresh = (req, res) => {
 
 // logout function
 const logout = (req, res) => {
-  res.clearCookie("accessToken");
-  res.clearCookie("refreshToken");
+  res.clearCookie("accessToken", { httpOnly: true, secure: true, sameSite: "none" });
+  res.clearCookie("refreshToken", { httpOnly: true, secure: true, sameSite: "none" });
   res.json({ message: "Logged out successfully" });
 };
 

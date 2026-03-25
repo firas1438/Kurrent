@@ -3,7 +3,9 @@ import { attachAuthInterceptor } from "./interceptor";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
-console.log('Using API URL:', baseURL);
+if (process.env.NODE_ENV !== "production") {
+  console.log('Using API URL:', baseURL);
+}
 
 const api = axios.create({
   baseURL,
