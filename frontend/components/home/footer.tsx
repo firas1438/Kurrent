@@ -14,11 +14,11 @@ const footerLinks = [
   },
   {
     title: "FAQ",
-    href: "#",
+    href: "#faq",
   },
   {
     title: "Testimonials",
-    href: "#",
+    href: "#testimonials",
   },
   {
     title: "CTA",
